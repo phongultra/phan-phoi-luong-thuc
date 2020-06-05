@@ -127,6 +127,6 @@
   },
   "defaultProject": "phan-phoi-luong-thuc",
   "cli": {
-    "analytics": false
+    "analytics": "3187ab04-d159-4dff-8887-244c00d504c9"
   }
 }
