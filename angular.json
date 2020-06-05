@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "phan-phoi-luong-thuc"
+    }
+  },
+  "defaultProject": "phan-phoi-luong-thuc",
+  "cli": {
+    "analytics": false
+  }
 }
