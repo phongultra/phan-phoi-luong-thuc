@@ -11,7 +11,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow
 
-  zoom = 12
+  zoom = 15
   center: google.maps.LatLngLiteral
   options: google.maps.MapOptions = {
     zoomControl: false,
@@ -20,9 +20,10 @@ export class HomeComponent implements OnInit {
     mapTypeId: 'roadmap',
     maxZoom: 20,
     minZoom: 8,
+    disableDefaultUI: true
   }
   markers = []
-  infoContent = ''
+  infoContent = '<h1>aaa</h1>'
   listHouse = [
     {
       title: "Mái ấm hướng dương",
@@ -30,10 +31,22 @@ export class HomeComponent implements OnInit {
       lng: 106.645367,
       peope: 20,
       food: "10%"
+    },
+    {
+      title: "Mái ấm tre xanh",
+      lat: 10.767544,
+      lng: 106.700607,
+      peope: 10,
+      food: "50%"
+    },
+    {
+      title: "CEPORER",
+      lat: 10.778601,
+      lng: 106.698609,
+      peope: 20,
+      food: "100%"
     }
   ]
-
-  //Mái ấm Hướng Dương 10.747826, 106.645367
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition(position => {
@@ -43,26 +56,7 @@ export class HomeComponent implements OnInit {
       }
     })
 
-    let contentString = '<div id="content">'+
-    '<div id="siteNotice">'+
-    '</div>'+
-    '<h1 id="firstHeading" class="firstHeading">Uluru</h1>'+
-    '<div id="bodyContent">'+
-    '<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-    'sandstone rock formation in the southern part of the '+
-    'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) '+
-    'south west of the nearest large town, Alice Springs; 450&#160;km '+
-    '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major '+
-    'features of the Uluru - Kata Tjuta National Park. Uluru is '+
-    'sacred to the Pitjantjatjara and Yankunytjatjara, the '+
-    'Aboriginal people of the area. It has many springs, waterholes, '+
-    'rock caves and ancient paintings. Uluru is listed as a World '+
-    'Heritage Site.</p>'+
-    '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">'+
-    'https://en.wikipedia.org/w/index.php?title=Uluru</a> '+
-    '(last visited June 22, 2009).</p>'+
-    '</div>'+
-    '</div>';
+    let contentString = '<div><h1>Hallo</h1></div>';
 
     for (let i = 0; i < this.listHouse.length; i++) {
       this.markers.push({
@@ -70,9 +64,10 @@ export class HomeComponent implements OnInit {
           lat: this.listHouse[i].lat,
           lng: this.listHouse[i].lng
         },
+        icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
         label: {
-          color: 'red',
-          //text: 'Marker label ' + (this.markers.length + 1),
+          color: '#000000',
+          text: this.listHouse[i].title,
         },
         title: this.listHouse[i].title,
         info: contentString,
@@ -82,6 +77,7 @@ export class HomeComponent implements OnInit {
       })
 
     }
+
   }
 
   zoomBase() {
@@ -107,28 +103,31 @@ export class HomeComponent implements OnInit {
     console.log("center info", JSON.stringify(this.map.getCenter()))
   }
 
-  addMarker() {
-    this.markers.push({
-      position: {
-        lat: this.center.lat + ((Math.random() - 0.5) * 2) / 10,
-        lng: this.center.lng + ((Math.random() - 0.5) * 2) / 10,
-      },
-      icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png",
-      label: {
-        color: 'red',
-        //text: 'Marker label ' + (this.markers.length + 1),
-      },
-      title: 'Marker title ' + (this.markers.length + 1),
-      info: 'Marker info ' + (this.markers.length + 1),
-      options: {
-        animation: google.maps.Animation.DROP,
-      },
-    })
-  }
+  // addMarker() {
+  //   this.markers.push({
+  //     position: {
+  //       lat: this.center.lat + ((Math.random() - 0.5) * 2) / 10,
+  //       lng: this.center.lng + ((Math.random() - 0.5) * 2) / 10,
+  //     },
+  //     icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png",
+  //     label: {
+  //       color: 'red',
+  //       //text: 'Marker label ' + (this.markers.length + 1),
+  //     },
+  //     title: 'Marker title ' + (this.markers.length + 1),
+  //     info: 'Marker info ' + (this.markers.length + 1),
+  //     options: {
+  //       animation: google.maps.Animation.DROP,
+  //     },
+  //   })
+  // }
 
   openInfo(marker: MapMarker, content) {
+    console.log(1111, content)
     this.infoContent = content
     this.info.open(marker)
   }
+
+
 
 }
