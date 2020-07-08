@@ -15,7 +15,12 @@ import { FooterComponent } from './include/footer/footer.component';
 
 import { HttpClientModule } from '@angular/common/http';
 import { UserCreateComponent } from './components/user-create/user-create.component';
-import { MapComponent } from './components/map/map.component';
+import { HomeCreateComponent } from './components/home-create/home-create.component';
+import { HomeDetailComponent } from './components/home-detail/home-detail.component';
+import { HomeListComponent } from './components/home-list/home-list.component';
+
+import { ChartsModule } from 'ng2-charts';
+
 
 
 @NgModule({
@@ -26,7 +31,9 @@ import { MapComponent } from './components/map/map.component';
     NotFoundComponent,
     FooterComponent,
     UserCreateComponent,
-    MapComponent,
+    HomeCreateComponent,
+    HomeDetailComponent,
+    HomeListComponent,
   ],
   imports: [
     BrowserModule,
@@ -36,10 +43,7 @@ import { MapComponent } from './components/map/map.component';
     FormsModule,
     ReactiveFormsModule,
     GoogleMapsModule,
-    AgmCoreModule.forRoot({
-      apiKey: "AIzaSyAvR9_B8ymX8YELstOmxx5pgP4LTY9maZw",
-      libraries: ["places", "geometry"]
-    })
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

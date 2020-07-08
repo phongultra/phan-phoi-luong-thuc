@@ -1,0 +1,27 @@
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            buttons
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            grid: ag grid
+
+        </div>
+        <div class="col-12">
+            <div>dsadsada
+                <google-map height="400px" width="100%" [zoom]="ggMapZoom" [center]="ggMapCenter"
+                    [options]="ggMapOptions">
+                    <map-marker #markerElemaasdsafsa *ngFor="let ggMapMarker of ggMapMarkers" [position]="ggMapMarker.position">
+                    </map-marker>
+                </google-map>
+                <google-map height="400px" width="100%"></google-map>
+            </div>
+
+        </div>
+        <div class="col-12">
+            home detail
+        </div>
+    </div>
+</div>

@@ -1,5 +1,10 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ApiService } from './../../service/api.service';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps'
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+
+import { ChartDataSets, ChartOptions } from 'chart.js';
+import { Color, Label } from 'ng2-charts';
 
 
 @Component({
@@ -7,11 +12,65 @@ import { MapInfoWindow, MapMarker, GoogleMap } from '@angular/google-maps'
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
+
+
 export class HomeComponent implements OnInit {
+
+  /*Chart */
+  lineChartData: ChartDataSets[] = [
+    { data: [], label: 'Số người' },
+  ];
+
+  lineChartLabels: Label[] = [];
+
+  lineChartOptions = {
+    responsive: true,
+  };
+
+  lineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: 'rgba(255,255,0,0.28)',
+    },
+  ];
+
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType = 'line';
+  /*Charrt - end */
+
+
+
+  submitted = false;
+
+  homeForm: FormGroup;
+
+  constructor(
+    public fb: FormBuilder,
+    private ngZone: NgZone,
+    private apiService: ApiService
+  ) {
+    this.mainForm();
+  }
+
+  mainForm() {
+    this.homeForm = this.fb.group({
+      name: ['', [Validators.required]],
+      address: ['', [Validators.required]],
+      phoneNumber: ['', [Validators.required]],
+      people: ['']
+    })
+  }
+
+  get myForm() {
+    return this.homeForm.controls;
+  }
+
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap
   @ViewChild(MapInfoWindow, { static: false }) info: MapInfoWindow
 
-  zoom = 15
+  zoomBaseNum = 13
+  zoom = 13
   center: google.maps.LatLngLiteral
   options: google.maps.MapOptions = {
     zoomControl: false,
@@ -22,31 +81,18 @@ export class HomeComponent implements OnInit {
     minZoom: 8,
     disableDefaultUI: true
   }
-  markers = []
-  infoContent = '<h1>aaa</h1>'
-  listHouse = [
-    {
-      title: "Mái ấm hướng dương",
-      lat: 10.747826,
-      lng: 106.645367,
-      peope: 20,
-      food: "10%"
-    },
-    {
-      title: "Mái ấm tre xanh",
-      lat: 10.767544,
-      lng: 106.700607,
-      peope: 10,
-      food: "50%"
-    },
-    {
-      title: "CEPORER",
-      lat: 10.778601,
-      lng: 106.698609,
-      peope: 20,
-      food: "100%"
-    }
-  ]
+  ggMapMarkers = []
+  ggMapMarker
+  homeInfo = {
+    name: "",
+    phoneNumber: "",
+    address: "",
+    address_location: {},
+    people: "",
+  }
+  homeHistory = []
+  currentHomeId = ""
+
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition(position => {
@@ -56,32 +102,31 @@ export class HomeComponent implements OnInit {
       }
     })
 
-    let contentString = '<div><h1>Hallo</h1></div>';
+    this.apiService.getAllHome().subscribe(
+      (res) => {
+        if (res.length) {
+          console.log(45455454, res)
+          for (let i in res) {
+            if (res[i].address_location) {
+              this.ggMapMarkers[i] = res[i].address_location
+              this.ggMapMarkers[i]["home_id"] = res[i]["_id"]
+            }
+          }
+          console.log(333333333, this.ggMapMarkers)
 
-    for (let i = 0; i < this.listHouse.length; i++) {
-      this.markers.push({
-        position: {
-          lat: this.listHouse[i].lat,
-          lng: this.listHouse[i].lng
-        },
-        icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-        label: {
-          color: '#000000',
-          text: this.listHouse[i].title,
-        },
-        title: this.listHouse[i].title,
-        info: contentString,
-        options: {
-          animation: google.maps.Animation.DROP,
-        },
-      })
-
-    }
+          this.center = {
+            lat: res[0].address_location.position.lat,
+            lng: res[0].address_location.position.lng,
+          }
+        }
+      }, (error) => {
+        console.log(error);
+      });
 
   }
 
   zoomBase() {
-    if (this.zoom < this.options.maxZoom) this.zoom = 12;
+    if (this.zoom < this.options.maxZoom) this.zoom = this.zoomBaseNum;
   }
 
   zoomIn() {
@@ -95,39 +140,103 @@ export class HomeComponent implements OnInit {
 
   }
 
-  click(event: google.maps.MouseEvent) {
-    console.log("event click", event)
-  }
-
   logCenter() {
     console.log("center info", JSON.stringify(this.map.getCenter()))
   }
 
-  // addMarker() {
-  //   this.markers.push({
-  //     position: {
-  //       lat: this.center.lat + ((Math.random() - 0.5) * 2) / 10,
-  //       lng: this.center.lng + ((Math.random() - 0.5) * 2) / 10,
-  //     },
-  //     icon: "https://developers.google.com/maps/documentation/javascript/examples/full/images/parking_lot_maps.png",
-  //     label: {
-  //       color: 'red',
-  //       //text: 'Marker label ' + (this.markers.length + 1),
-  //     },
-  //     title: 'Marker title ' + (this.markers.length + 1),
-  //     info: 'Marker info ' + (this.markers.length + 1),
-  //     options: {
-  //       animation: google.maps.Animation.DROP,
-  //     },
-  //   })
-  // }
 
   openInfo(marker: MapMarker, content) {
-    console.log(1111, content)
-    this.infoContent = content
+    // this.infoContent = content
     this.info.open(marker)
   }
 
+  getHome(marker: MapMarker, content) {
+    this.currentHomeId = content["home_id"];
+    console.log(this.currentHomeId, content["home_id"]);
+    this.apiService.getHome(content["home_id"]).subscribe(
+      (res) => {
+        this.homeForm.setValue({
+          name: res["name"],
+          phoneNumber: res["phoneNumber"],
+          address: res["address"],
+          people: res["people"]
+        });
 
+        this.homeInfo = {
+          name: res["name"],
+          phoneNumber: res["phoneNumber"],
+          address: res["address"],
+          address_location: res["address_location"],
+          people: res["people"]
+        }
+
+      }, (error) => {
+        console.log(error);
+      });
+
+    // Get history
+    this.apiService.getHomeHistory(content["home_id"]).subscribe(
+      (res) => {
+        this.homeHistory = res;
+        this.lineChartData[0]["data"] = [];
+        this.lineChartLabels = [];
+        for (let i in res) {
+          this.lineChartData[0]["data"].push(res[i]["people"]);
+          this.lineChartLabels.push(res[i]["modified_date"])
+        }
+      }, (error) => {
+        console.log(error);
+      });
+
+  }
+
+
+  // getAddressInfo() {
+  //   this.apiService.getAddressInfo(this.homeForm.value.address).subscribe(
+  //     (res) => {
+  //       if (res.status == "OK" && res.results.length) {
+
+  //         this.homeInfo.address_location = {
+  //           id: res.results[0].place_id,
+  //           position: res.results[0]["geometry"]["location"],
+  //         }
+
+  //         console.log("get by address okkkkkk", this.homeInfo, res)
+
+  //         this.ggMapMarker["position"] = this.homeInfo["address_location"]["position"];
+  //         this.ggMapMarker["label"] = "";
+  //         this.ggMapMarker["title"] = "";
+  //         this.ggMapMarker["options"] = {
+  //           draggable: true
+  //         };
+  //       }
+
+  //     }, (error) => {
+  //       console.log(error);
+  //     });
+  // }
+
+  onUpdate() {
+    this.submitted = true;
+    if (!this.homeForm.valid) {
+      return false;
+    } else {
+      let is_change_people = this.homeInfo.people == this.homeForm.value.people ? false : true;
+      let _data = {
+        name: this.homeForm.value.name || "errorName",
+        phoneNumber: this.homeForm.value.phoneNumber || "",
+        people: this.homeForm.value.people,
+        address: this.homeForm.value.address || "errorAddress",
+        address_location: this.homeInfo["address_location"],
+      }
+
+      this.apiService.updateHome(this.currentHomeId, is_change_people, _data).subscribe(
+        (res) => {
+          console.log('User successfully updated!')
+        }, (error) => {
+          console.log(error);
+        });
+    }
+  }
 
 }

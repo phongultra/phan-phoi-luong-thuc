@@ -8,7 +8,7 @@ let express = require('express'),
 // Connecting with mongo db
 mongoose.Promise = global.Promise;
 mongoose.connect(dbConfig.db, {
-   useNewUrlParser: true
+   useNewUrlParser: true, useFindAndModify: false 
 }).then(() => {
       console.log('Database sucessfully connected')
    },
@@ -19,6 +19,8 @@ mongoose.connect(dbConfig.db, {
 
 // Setting up port with express js
 const userRoute = require('../backend/routes/user.route')
+const homeRoute = require('../backend/routes/home.route')
+const homeHistoryRoute = require('../backend/routes/home_history.route')
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -27,7 +29,9 @@ app.use(bodyParser.urlencoded({
 app.use(cors()); 
 app.use(express.static(path.join(__dirname, 'dist/mean-stack-crud-app')));
 app.use('/', express.static(path.join(__dirname, 'dist/mean-stack-crud-app')));
-app.use('/api', userRoute)
+app.use('/api/user', userRoute)
+app.use('/api/home', homeRoute)
+app.use('/api/home-history', homeHistoryRoute)
 
 // Create port
 const port = process.env.PORT || 4000;
