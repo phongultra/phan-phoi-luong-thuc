@@ -1,8 +1,8 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12">
+        <div class="col-lg-6">
 
-            <google-map height="90vh" width="100%" [zoom]="zoom" [center]="center" [options]="options">
+            <google-map height="100vh" width="100%" [zoom]="zoom" [center]="center" [options]="options">
                 <map-marker #markerElem *ngFor="let ggMapMarker of ggMapMarkers" [position]="ggMapMarker.position"
                     [label]="ggMapMarker.label" (mapClick)="getHome(markerElem, ggMapMarker)">
                 </map-marker>
@@ -16,15 +16,15 @@
             <button (click)="logCenter()">Log center</button>
             <!-- <button (click)="addMarker()">Add marker</button> -->
         </div>
-        <div class="col-12">
-            <form [formGroup]="homeForm" (ngSubmit)="onUpdate(); homeForm.reset();">
+        <div class="col-lg-6">
+            <form [formGroup]="homeForm" (ngSubmit)="onUpdate();">
                 <div class="form-group">
                     <label for="">Tên trại</label>
                     <input class="form-control" type="text" formControlName="name">
                 </div>
 
                 <div class="form-group">
-                    <label for="">Điện thoại liên lạc (*)</label>
+                    <label for="">Điện thoại liên lạc</label>
                     <input class="form-control" type="text" formControlName="phoneNumber">
                 </div>
 
@@ -42,17 +42,18 @@
                     <button class="btn btn-success btn-lg btn-block" type="submit">Cập Nhật</button>
                 </div>
             </form>
+            <div class="chart-wrapper">
+                <canvas baseChart 
+                    [datasets]="lineChartData" 
+                    [labels]="lineChartLabels" 
+                    [options]="lineChartOptions"
+                    [colors]="lineChartColors" 
+                    [legend]="lineChartLegend" 
+                    [chartType]="lineChartType" 
+                    [plugins]="lineChartPlugins">
+                </canvas>
+            </div>
         </div>
-        <div class="chart-wrapper col-12">
-            <canvas baseChart 
-                [datasets]="lineChartData" 
-                [labels]="lineChartLabels" 
-                [options]="lineChartOptions"
-                [colors]="lineChartColors" 
-                [legend]="lineChartLegend" 
-                [chartType]="lineChartType" 
-                [plugins]="lineChartPlugins">
-            </canvas>
-        </div>
+        
     </div>
 </div>

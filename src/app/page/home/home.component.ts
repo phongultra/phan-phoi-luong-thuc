@@ -6,6 +6,9 @@ import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ChartDataSets, ChartOptions } from 'chart.js';
 import { Color, Label } from 'ng2-charts';
 
+import * as moment from 'moment'; // add this 1 of 4
+
+
 
 @Component({
   selector: 'app-home',
@@ -15,7 +18,6 @@ import { Color, Label } from 'ng2-charts';
 
 
 export class HomeComponent implements OnInit {
-
   /*Chart */
   lineChartData: ChartDataSets[] = [
     { data: [], label: 'Số người' },
@@ -48,7 +50,8 @@ export class HomeComponent implements OnInit {
   constructor(
     public fb: FormBuilder,
     private ngZone: NgZone,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private moment: Moment
   ) {
     this.mainForm();
   }
@@ -182,7 +185,8 @@ export class HomeComponent implements OnInit {
         this.lineChartLabels = [];
         for (let i in res) {
           this.lineChartData[0]["data"].push(res[i]["people"]);
-          this.lineChartLabels.push(res[i]["modified_date"])
+          console.log(res[i]["modified_date"])
+          this.lineChartLabels.push(this.moment(res[i]["modified_date"], "DD/MM/YYYY"))
         }
       }, (error) => {
         console.log(error);
