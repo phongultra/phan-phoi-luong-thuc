@@ -14,12 +14,15 @@ import { NotFoundComponent } from './page/not-found/not-found.component';
 import { FooterComponent } from './include/footer/footer.component';
 
 import { HttpClientModule } from '@angular/common/http';
-import { UserCreateComponent } from './components/user-create/user-create.component';
 import { HomeCreateComponent } from './components/home-create/home-create.component';
 import { HomeDetailComponent } from './components/home-detail/home-detail.component';
 import { HomeListComponent } from './components/home-list/home-list.component';
 
 import { ChartsModule } from 'ng2-charts';
+
+import { AgGridModule } from 'ag-grid-angular';
+
+
 
 
 
@@ -30,7 +33,6 @@ import { ChartsModule } from 'ng2-charts';
     HomeComponent,
     NotFoundComponent,
     FooterComponent,
-    UserCreateComponent,
     HomeCreateComponent,
     HomeDetailComponent,
     HomeListComponent,
@@ -43,7 +45,8 @@ import { ChartsModule } from 'ng2-charts';
     FormsModule,
     ReactiveFormsModule,
     GoogleMapsModule,
-    ChartsModule
+    ChartsModule,
+    AgGridModule.withComponents([]),
   ],
   providers: [],
   bootstrap: [AppComponent]
