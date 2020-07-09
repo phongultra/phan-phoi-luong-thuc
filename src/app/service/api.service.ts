@@ -45,6 +45,17 @@ export class ApiService {
     )
   }
 
+  //Count all Home
+  countHome(): Observable<any> {
+    let url = `${this.baseUri}/all/count-home`;
+    return this.http.get(url, { headers: this.headers }).pipe(
+      map((res: Response) => {
+        return res || {}
+      }),
+      catchError(this.errorMgmt)
+    )
+  }
+
   //Update one home
   updateHome(id, is_change_people, data): Observable<any> {
     let url = `${this.baseUri}/home/update/${id}/${is_change_people}`;
@@ -62,6 +73,15 @@ export class ApiService {
       }),
       catchError(this.errorMgmt)
     )
+  }
+
+  //Create history by home
+  createHomeHistory(data): Observable<any> {
+    let url = `${this.baseUri}/home-history/create`;
+    return this.http.post(url, data)
+      .pipe(
+        catchError(this.errorMgmt)
+      )
   }
 
 

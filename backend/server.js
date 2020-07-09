@@ -21,6 +21,7 @@ mongoose.connect(dbConfig.db, {
 const userRoute = require('../backend/routes/user.route')
 const homeRoute = require('../backend/routes/home.route')
 const homeHistoryRoute = require('../backend/routes/home_history.route')
+const allRoute = require('../backend/routes/all.route')
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -32,6 +33,7 @@ app.use('/', express.static(path.join(__dirname, 'dist/mean-stack-crud-app')));
 app.use('/api/user', userRoute)
 app.use('/api/home', homeRoute)
 app.use('/api/home-history', homeHistoryRoute)
+app.use('/api/all', allRoute)
 
 // Create port
 const port = process.env.PORT || 4000;

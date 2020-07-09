@@ -18,6 +18,7 @@ homeRoute.route('/create').post((req, res, next) => {
       return next(error)
     } else {
       res.json(data)
+      console.log("Home create successfully")
     }
   })
 });

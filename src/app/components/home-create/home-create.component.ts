@@ -31,7 +31,7 @@ export class HomeCreateComponent implements OnInit {
   }
 
   ggMapMarker = {
-    position : {}
+    position: {}
   }
 
   homeInfo = {
@@ -39,7 +39,7 @@ export class HomeCreateComponent implements OnInit {
     phoneNumber: "",
     address: "",
     address_location: {},
-    people: ""
+    people: 0
   }
 
   constructor(
@@ -66,7 +66,8 @@ export class HomeCreateComponent implements OnInit {
     this.homeForm = this.fb.group({
       name: ['', [Validators.required]],
       address: ['', [Validators.required]],
-      phoneNumber: ['', [Validators.required/*, Validators.pattern('^[0-9]+$')*/]]
+      phoneNumber: ['', [Validators.required/*, Validators.pattern('^[0-9]+$')*/]],
+      people: ['', [Validators.required/*, Validators.pattern('^[0-9]+$')*/]]
     })
   }
 
@@ -121,8 +122,15 @@ export class HomeCreateComponent implements OnInit {
 
       this.apiService.createHome(_data).subscribe(
         (res) => {
-          console.log('User successfully created!')
-          //this.ngZone.run(() => this.router.navigateByUrl('/employees-list'))
+          console.log('1 Home successfully created!', res)
+          if (res["_id"]) {
+            this.apiService.createHomeHistory({id: res["_id"], people: res["people"]}).subscribe(
+              (res2) => {
+                console.log('1 Home History successfully created!', res2)
+              }, (error) => {
+                console.log(error);
+              });
+          }
         }, (error) => {
           console.log(error);
         });

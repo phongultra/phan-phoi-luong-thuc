@@ -1,59 +1,11 @@
-<div class="container-fluid">
+<div class="container">
     <div class="row">
         <div class="col-lg-6">
+            <h2 class="mt-4">Hệ thống quản lý bảo trợ xã hội</h2>
 
-            <google-map height="100vh" width="100%" [zoom]="zoom" [center]="center" [options]="options">
-                <map-marker #markerElem *ngFor="let ggMapMarker of ggMapMarkers" [position]="ggMapMarker.position"
-                    [label]="ggMapMarker.label" (mapClick)="getHome(markerElem, ggMapMarker)">
-                </map-marker>
-
-                <!-- <map-info-window>{{ infoContent }}</map-info-window> -->
-            </google-map>
-
-            <button (click)="zoomBase()">Reset zoom</button>
-            <button (click)="zoomIn()">Zoom in</button>
-            <button (click)="zoomOut()">Zoom out</button>
-            <button (click)="logCenter()">Log center</button>
-            <!-- <button (click)="addMarker()">Add marker</button> -->
+            <label for=""><b>Home count: </b>{{homeCount || 0}}</label> 
         </div>
         <div class="col-lg-6">
-            <form [formGroup]="homeForm" (ngSubmit)="onUpdate();">
-                <div class="form-group">
-                    <label for="">Tên trại</label>
-                    <input class="form-control" type="text" formControlName="name">
-                </div>
-
-                <div class="form-group">
-                    <label for="">Điện thoại liên lạc</label>
-                    <input class="form-control" type="text" formControlName="phoneNumber">
-                </div>
-
-                <div class="form-group">
-                    <label for="">Số người</label>
-                    <input class="form-control" type="text" formControlName="people">
-                </div>
-
-                <div class="form-group">
-                    <label for="">Địa chỉ (*)</label>
-                    <input class="form-control" type="text" formControlName="address">
-                </div>
-
-                <div class="form-group">
-                    <button class="btn btn-success btn-lg btn-block" type="submit">Cập Nhật</button>
-                </div>
-            </form>
-            <div class="chart-wrapper">
-                <canvas baseChart 
-                    [datasets]="lineChartData" 
-                    [labels]="lineChartLabels" 
-                    [options]="lineChartOptions"
-                    [colors]="lineChartColors" 
-                    [legend]="lineChartLegend" 
-                    [chartType]="lineChartType" 
-                    [plugins]="lineChartPlugins">
-                </canvas>
-            </div>
         </div>
-        
     </div>
 </div>

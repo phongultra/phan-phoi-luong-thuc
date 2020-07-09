@@ -16,5 +16,25 @@ HomeHistoryRoute.route('/:id').get((req, res) => {
   })
 })
 
+//Create one history by Home ID
+HomeHistoryRoute.route('/create').post((req, res, next) => {
+  if (req._body) {
+    let _date = Date.now();
+    let _data = {
+      homeId: req.body.id,
+      people: req.body.people,
+      modified_date: _date
+    }
+    HomeHistory.create(_data, (error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data)
+        console.log('History created successfully')
+      }
+    })
+  }
+});
+
 
 module.exports = HomeHistoryRoute;

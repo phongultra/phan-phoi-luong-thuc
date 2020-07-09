@@ -1,6 +1,5 @@
 <div class="row justify-content-center">
-    <div class="col-md-4 register-employee">
-        <!-- form card register -->
+    <div class="col-md-6">
         <div class="card-body">
             <form [formGroup]="homeForm" (ngSubmit)="onSubmit(); homeForm.reset()">
                 <div class="form-group">
@@ -25,8 +24,8 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="">Số người</label>
-                    <input class="form-control" type="number" value="0" formControlName="people">
+                    <label for="">Số người (*)</label>
+                    <input class="form-control" type="number" formControlName="people">
                 </div>
 
                 <div class="form-group">
@@ -43,12 +42,7 @@
                     <div class="invalid-feedback" *ngIf="submitted && myForm.address.errors?.required">
                         Địa chỉ là bắt buộc
                     </div>
-                    <google-map height="400px" width="100%" [zoom]="ggMapZoom" [center]="ggMapCenter"
-                        [options]="ggMapOptions">
-                        <map-marker [ngIf]="ggMapMarker.position" #markerElem [position]="ggMapMarker.position"
-                            (mapDragend)="positionChanged(markerElem)">
-                        </map-marker>
-                    </google-map>
+
 
                 </div>
 
@@ -57,5 +51,12 @@
                 </div>
             </form>
         </div>
+    </div>
+    <div class="col-md-6">
+        <google-map height="500px" width="100%" [zoom]="ggMapZoom" [center]="ggMapCenter" [options]="ggMapOptions">
+            <map-marker *ngIf="ggMapMarker.position" #markerElem [position]="ggMapMarker.position"
+                (mapDragend)="positionChanged(markerElem)">
+            </map-marker>
+        </google-map>
     </div>
 </div>
