@@ -16,6 +16,7 @@ import { Color, Label } from 'ng2-charts';
 
 export class HomeComponent implements OnInit {
   homeCount = 0
+  peopleCount = 0
 
   constructor(
     private apiService: ApiService,
@@ -23,11 +24,21 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+
     this.apiService.countHome().subscribe(
       (res) => {
         if (res) {
           this.homeCount = res;
+        }
+      }, (error) => {
+        console.log(error);
+      });
+
+    this.apiService.countPeople().subscribe(
+      (res) => {
+        console.log(88888, res)
+        if (res && res.length) {
+          this.peopleCount = res[0].people;
         }
       }, (error) => {
         console.log(error);

@@ -20,6 +20,7 @@ mongoose.connect(dbConfig.db, {
 // Setting up port with express js
 const userRoute = require('../backend/routes/user.route')
 const homeRoute = require('../backend/routes/home.route')
+const districtRoute = require('../backend/routes/district.route')
 const homeHistoryRoute = require('../backend/routes/home_history.route')
 const allRoute = require('../backend/routes/all.route')
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/user', userRoute)
 app.use('/api/home', homeRoute)
 app.use('/api/home-history', homeHistoryRoute)
 app.use('/api/all', allRoute)
+app.use('/api/district', districtRoute)
 
 // Create port
 const port = process.env.PORT || 4000;

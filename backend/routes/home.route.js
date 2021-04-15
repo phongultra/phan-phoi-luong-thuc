@@ -34,6 +34,17 @@ homeRoute.route('/').get((req, res) => {
   })
 })
 
+//get home by district
+homeRoute.route('/district/:district').get((req, res) => {
+  Home.find({district: parseInt(req.params.district)},(error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
 // Get single Home
 homeRoute.route('/:id').get((req, res) => {
   Home.findById(req.params.id, (error, data) => {

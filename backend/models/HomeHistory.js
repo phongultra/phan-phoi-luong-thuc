@@ -7,7 +7,7 @@ let HomeHistory = new Schema({
       type: String
    },
    people: {
-      type: Object
+      type: Number
    },
    modified_date: {
       type: Date

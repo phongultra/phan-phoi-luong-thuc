@@ -16,7 +16,7 @@ let Home = new Schema({
       type: Object
    },
    people: {
-      type: String
+      type: Number
    },
    create_date: {
       type: Date

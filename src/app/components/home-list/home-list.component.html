@@ -1,39 +1,87 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-7">
             <!-- Buttons -->
-            <div class="text-right py-3">
-                <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomBase()">Reset
+            <div class="d-flex justify-content-between py-3">
+                <div class="d-flex align-items-center">
+                    <b class="mr-3">Chọn khu vực</b>
+                    <select [ngModel]="selectedDistrict" (ngModelChange)="onChangeDistrict($event)"
+                        style="width: 150px;" name="selectDist" id="selectDist" class="form-control">
+                        <option [value]="100">TP.HCM</option>
+                        <option [value]="1">Quận 1</option>
+                        <option [value]="2">Quận 2</option>
+                        <option [value]="3">Quận 3</option>
+                        <option [value]="4">Quận 4</option>
+                        <option [value]="1">Quận 5</option>
+                        <option [value]="1">Quận 6</option>
+                        <option [value]="1">Quận 7</option>
+                        <option [value]="1">Quận 8</option>
+                        <option [value]="1">Quận 9</option>
+                        <option [value]="1">Quận 10</option>
+                        <option [value]="1">Quận 11</option>
+                        <option [value]="1">Quận 12</option>
+                        <option [value]="1">Thủ Đức</option>
+                        <option [value]="1">Bình Chánh</option>
+                        <option [value]="1">Củ Chi</option>
+                        <option [value]="1">Cần Giờ</option>
+                    </select>
+                </div>
+
+
+                <!-- <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomBase()">Reset
                     zoom</button>
                 <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomIn()">Zoom
                     in</button>
                 <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomOut()">Zoom
-                    out</button>
-                <button class="btn btn-primary" (click)="showListByMap = !showListByMap">Toggle View <span
-                        *ngIf="showListByMap">(Table)</span><span *ngIf="!showListByMap">(Map)</span>
+                    out</button> -->
+                <button class="btn btn-success" (click)="showListByMap = !showListByMap">Chuyển chế độ xem <span
+                        *ngIf="showListByMap">(Bảng)</span><span *ngIf="!showListByMap">(Bản đồ)</span>
                 </button>
             </div>
 
             <!-- show by map -->
             <div *ngIf="showListByMap">
-                <google-map height="80vh" width="100%" [zoom]="zoom" [center]="center" [options]="options">
-                    <map-marker #markerElem *ngFor="let ggMapMarker of ggMapMarkers" [position]="ggMapMarker.position"
-                        [label]="ggMapMarker.label" (mapClick)="getHome(markerElem, ggMapMarker)">
-                    </map-marker>
-                </google-map>
+                <agm-map [latitude]="center.lat" [longitude]="center.lng" [zoom]="zoom" [disableDefaultUI]="false"
+                    [zoomControl]="true">
+
+                    <agm-marker *ngFor="let m of ggMapMarkers; let i = index" (markerClick)="getHome(m)"
+                        [latitude]="m.position.lat" [longitude]="m.position.lng" [markerDraggable]="false"
+                        [iconUrl]="homeIcon">
+
+                        <!-- <agm-info-window>
+                            <strong>InfoWindow content</strong>
+                        </agm-info-window> -->
+
+                    </agm-marker>
+
+                    <!-- <agm-circle *ngFor="let p of paths; let i = index" [latitude]="p.lat" [longitude]="p.lng"
+                        [radius]="1000" [fillColor]="'green'" [circleDraggable]="false" [editable]="false">
+                    </agm-circle> -->
+
+                    <agm-polygon [paths]="paths" [strokeWeight]="2" [strokeColor]="'red'" [fillColor]="'yellow'"
+                        [fillOpacity]="0.25" [strokeOpacity]="0.75"> </agm-polygon>
+
+                    <!-- <agm-drawing-manager (polygonComplete)="polygonCreated($event)"
+                        [drawingControl]="managerOptions.drawingControl"
+                        [drawingControlOptions]="managerOptions.drawingControlOptions"
+                        [polygonOptions]='managerOptions.polygonOptions' [drawingMode]='managerOptions.drawingMode'>
+                    </agm-drawing-manager> -->
+
+                </agm-map>
             </div>
 
             <!-- show by grid -->
             <div *ngIf="!showListByMap">
-                <ag-grid-angular #homeGrid style="width: 100%; height: 80vh; max-width: 900px;" class="ag-theme-alpine"
+                <ag-grid-angular #homeGrid style="width: 100%; height: 80vh; max-width: 100%;" class="ag-theme-alpine"
                     [rowData]="homeListData" [columnDefs]="columnDefs" [rowSelection]="rowSelection"
-                    (selectionChanged)="onSelectionChanged()"  (gridReady)="onGridReady($event)">
+                    (selectionChanged)="onSelectionChanged()" (gridReady)="onGridReady($event)">
                 </ag-grid-angular>
             </div>
 
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-5 mt-3">
             <form [formGroup]="homeForm" (ngSubmit)="onUpdate();">
+                <h2>Thông tin chi tiết</h2>
                 <div class="form-group">
                     <label for="">Tên trại</label>
                     <input class="form-control" type="text" formControlName="name">
@@ -53,12 +101,16 @@
                     <label for="">Địa chỉ (*)</label>
                     <input class="form-control" type="text" formControlName="address">
                 </div>
+                <div class="form-group font-italic">
+                    <label for="">Ngày cập nhật: </label>
+                    <span> {{homeInfo.modified_date}}</span>
+                </div>
 
                 <div class="form-group">
                     <button class="btn btn-success btn-lg btn-block" type="submit">Cập Nhật</button>
                 </div>
             </form>
-            <div class="chart-wrapper">
+            <div class="chart-wrapper" style="height: 320px">
                 <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
                     [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType"
                     [plugins]="barChartPlugins">
@@ -66,5 +118,29 @@
             </div>
         </div>
 
+    </div>
+    <div class="row d-none">
+        <div class="col-6">
+            <form [formGroup]="districtForm" (ngSubmit)="onCreateDistrict();">
+                <div class="form-group">
+                    <label for="">Tên quận</label>
+                    <input class="form-control" type="text" formControlName="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="">ID quận</label>
+                    <input class="form-control" type="text" formControlName="districtId">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Polygons</label>
+                    <textarea class="form-control" type="text" formControlName="polygon"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg btn-block" type="submit">Thêm quận</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>

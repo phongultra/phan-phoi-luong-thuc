@@ -24,8 +24,13 @@ export class ApiService {
   }
 
   // Get All Home
-  getAllHome(): Observable<any> {
+  getAllHome(param): Observable<any> {
     let url = `${this.baseUri}/home`;
+    if (param && param.district&&param.distric != "") {
+      url = `${this.baseUri}/home/district/${param.district}`;
+
+    }
+
     return this.http.get(url, { headers: this.headers }).pipe(
       map((res: Response) => {
         return res || {}
@@ -48,6 +53,17 @@ export class ApiService {
   //Count all Home
   countHome(): Observable<any> {
     let url = `${this.baseUri}/all/count-home`;
+    return this.http.get(url, { headers: this.headers }).pipe(
+      map((res: Response) => {
+        return res || {}
+      }),
+      catchError(this.errorMgmt)
+    )
+  }
+
+  //Count all People
+  countPeople(): Observable<any> {
+    let url = `${this.baseUri}/all/count-home-people`;
     return this.http.get(url, { headers: this.headers }).pipe(
       map((res: Response) => {
         return res || {}
@@ -84,6 +100,30 @@ export class ApiService {
       )
   }
 
+  //Get district polygon
+  //EX: District 1
+  //http://polygons.openstreetmap.fr/get_geojson.py?id=2587287&params=0
+
+  // getDistrictPolygon(data): Observable<any> {
+  //   // let url = `${this.baseUri}/home-history/create`;
+  //   let url = `http://polygons.openstreetmap.fr/get_geojson.py?id=2587287&params=0`
+  //   return this.http.get(url, { headers: this.headers }).pipe(
+  //     map((res: Response) => {
+  //       return res || {}
+  //     }),
+  //     catchError(this.errorMgmt)
+  //   )
+  // }
+
+  // getDistrictPolygon(): Observable<any> {
+  //   let url = `http://polygons.openstreetmap.fr/get_geojson.py?id=2587287&params=0`
+  //   return this.http.get(url, { headers: new HttpHeaders().set('Content-Type', 'text/plain')}).pipe(
+  //     map((res: Response) => {
+  //       return res || {}
+  //     }),
+  //     catchError(this.errorMgmt)
+  //   )
+  // }
 
 
 
@@ -155,6 +195,15 @@ export class ApiService {
     )
   }
 
+  //create district
+  // Create Home
+  createDistrict(data): Observable<any> {
+    let url = `${this.baseUri}/district/create`;
+    return this.http.post(url, data)
+      .pipe(
+        catchError(this.errorMgmt)
+      )
+  }
 
 
   // Error handling 
@@ -172,3 +221,5 @@ export class ApiService {
   }
 
 }
+
+

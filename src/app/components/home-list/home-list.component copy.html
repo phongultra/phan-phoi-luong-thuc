@@ -1,0 +1,74 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- Buttons -->
+            <div class="text-right py-3">
+                <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomBase()">Reset
+                    zoom</button>
+                <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomIn()">Zoom
+                    in</button>
+                <button *ngIf="showListByMap" class="btn btn-primary mr-3 float-left" (click)="zoomOut()">Zoom
+                    out</button>
+                <button class="btn btn-primary" (click)="showListByMap = !showListByMap">Toggle View <span
+                        *ngIf="showListByMap">(Table)</span><span *ngIf="!showListByMap">(Map)</span>
+                </button>
+            </div>
+
+            <!-- show by map -->
+            <div *ngIf="showListByMap">
+                <google-map height="80vh" width="100%" [zoom]="zoom" [center]="center" [options]="options">
+                    <map-marker #markerElem *ngFor="let ggMapMarker of ggMapMarkers" [position]="ggMapMarker.position"
+                        [label]="ggMapMarker.label" (mapClick)="getHome(markerElem, ggMapMarker)">
+                    </map-marker>
+                </google-map>
+            </div>
+
+            <!-- show by grid -->
+            <div *ngIf="!showListByMap">
+                <ag-grid-angular #homeGrid style="width: 100%; height: 80vh; max-width: 900px;" class="ag-theme-alpine"
+                    [rowData]="homeListData" [columnDefs]="columnDefs" [rowSelection]="rowSelection"
+                    (selectionChanged)="onSelectionChanged()"  (gridReady)="onGridReady($event)">
+                </ag-grid-angular>
+            </div>
+
+        </div>
+        <div class="col-lg-6 mt-3">
+            <form [formGroup]="homeForm" (ngSubmit)="onUpdate();">
+                <div class="form-group">
+                    <label for="">Tên trại</label>
+                    <input class="form-control" type="text" formControlName="name">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Điện thoại liên lạc</label>
+                    <input class="form-control" type="text" formControlName="phoneNumber">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Số người</label>
+                    <input class="form-control" type="text" formControlName="people">
+                </div>
+
+                <div class="form-group">
+                    <label for="">Địa chỉ (*)</label>
+                    <input class="form-control" type="text" formControlName="address">
+                </div>
+                <div class="form-group font-italic">
+                    <label for="">Ngày cập nhật: </label>
+                    <span> {{homeInfo.modified_date}}</span>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-success btn-lg btn-block" type="submit">Cập Nhật</button>
+                </div>
+            </form>
+            <div class="chart-wrapper" style="height: 320px">
+                <canvas baseChart [datasets]="barChartData" [labels]="barChartLabels" [options]="barChartOptions"
+                    [colors]="barChartColors" [legend]="barChartLegend" [chartType]="barChartType"
+                    [plugins]="barChartPlugins">
+                </canvas>
+            </div>
+        </div>
+
+    </div>
+</div>

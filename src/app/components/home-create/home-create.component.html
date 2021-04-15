@@ -47,6 +47,21 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="">Quận (*)</label>
+                    <!-- <input class="form-control" type="text" formControlName="address"> -->
+                    <div class="input-group mb-3">
+                        <input class="form-control" type="text" formControlName="address"
+                            (mouseleave)="getAddressInfo()">
+                    </div>
+                    <!-- error -->
+                    <div class="invalid-feedback" *ngIf="submitted && myForm.address.errors?.required">
+                        Quận là bắt buộc
+                    </div>
+
+
+                </div>
+
+                <div class="form-group">
                     <button class="btn btn-success btn-lg btn-block" type="submit">Tạo mới</button>
                 </div>
             </form>

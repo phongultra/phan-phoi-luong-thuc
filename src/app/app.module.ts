@@ -22,6 +22,9 @@ import { ChartsModule } from 'ng2-charts';
 
 import { AgGridModule } from 'ag-grid-angular';
 
+import { DatePipe } from '@angular/common';
+
+
 
 
 
@@ -47,8 +50,13 @@ import { AgGridModule } from 'ag-grid-angular';
     GoogleMapsModule,
     ChartsModule,
     AgGridModule.withComponents([]),
+    AgmCoreModule.forRoot({
+      // please get your own API key here:
+      // https://developers.google.com/maps/documentation/javascript/get-api-key?hl=en
+      apiKey: 'AIzaSyAvR9_B8ymX8YELstOmxx5pgP4LTY9maZw'
+    })
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
